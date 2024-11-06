@@ -46,7 +46,7 @@ extension MNURL {
                 if #available(iOS 16.0, *) {
                     return URL(filePath: string)
                 } else {
-                    return URL(fileAtPath: string)
+                    return URL(fileURLWithPath: string)
                 }
             }
             return URL(string: string)
