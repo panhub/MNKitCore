@@ -1,8 +1,8 @@
 //
 //  MNNameSpace.swift
-//  MNKit
+//  MNKit-Core
 //
-//  Created by 冯盼 on 2022/11/11.
+//  Created by pan on 2022/11/11.
 //  定义命名空间
 
 import Foundation
@@ -34,19 +34,19 @@ extension NameSpaceConvertible {
     public static var mn: NameSpaceWrapper<Self>.Type { NameSpaceWrapper<Self>.self }
 }
 
-/// 为NSObject添加`mn`命名空间
+/// 为`NSObject`添加命名空间
 extension NSObject: NameSpaceConvertible {}
 
-/// 关联属性
+/// 关联属性扩展Key
 public struct MNAssociatedKey {}
 
 extension MNAssociatedKey {
     
     /// 关联用户自定义信息
-    fileprivate static var userInfo: String = "com.mn.object.user.info"
+    fileprivate static var mn_user_info: String = "com.mn.object.user.info"
     
     /// 第一次关联
-    fileprivate static var firstAssociated: String = "com.mn.object.first.associated"
+    fileprivate static var mn_first_associated: String = "com.mn.object.first.associated"
 }
 
 /// 关联对象包装器
@@ -60,6 +60,7 @@ public class MNAssociationLitted {
     }
 }
 
+/// 命名空间对`NSObject`的支持
 extension NameSpaceWrapper where Base: NSObject {
     
     /// 关联用户保存的变量
@@ -67,21 +68,21 @@ extension NameSpaceWrapper where Base: NSObject {
         set {
             if let newValue = newValue {
                 let association = MNAssociationLitted(value: newValue)
-                objc_setAssociatedObject(base, &MNAssociatedKey.userInfo, association, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                objc_setAssociatedObject(base, &MNAssociatedKey.mn_user_info, association, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             } else {
-                objc_setAssociatedObject(base, &MNAssociatedKey.userInfo, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                objc_setAssociatedObject(base, &MNAssociatedKey.mn_user_info, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
         }
         get {
-            guard let association = objc_getAssociatedObject(base, &MNAssociatedKey.userInfo) as? MNAssociationLitted else { return nil }
+            guard let association = objc_getAssociatedObject(base, &MNAssociatedKey.mn_user_info) as? MNAssociationLitted else { return nil }
             return association.value
         }
     }
     
     /// 是否第一次关联
     public var isFirstAssociated: Bool {
-        if let _ = objc_getAssociatedObject(base, &MNAssociatedKey.firstAssociated) { return false }
-        objc_setAssociatedObject(base, &MNAssociatedKey.firstAssociated, true, .OBJC_ASSOCIATION_ASSIGN)
+        if let _ = objc_getAssociatedObject(base, &MNAssociatedKey.mn_first_associated) { return false }
+        objc_setAssociatedObject(base, &MNAssociatedKey.mn_first_associated, true, .OBJC_ASSOCIATION_ASSIGN)
         return true
     }
 }

@@ -1,8 +1,8 @@
 //
 //  MNURL.swift
-//  MNKit
+//  MNKit-Core
 //
-//  Created by 元气绘画 on 2023/10/31.
+//  Created by pan on 2023/10/31.
 //
 
 import Foundation

@@ -1,8 +1,8 @@
 //
 //  MNProtocol.swift
-//  MNKit
+//  MNKit-Core
 //
-//  Created by 冯盼 on 2022/8/1.
+//  Created by pan on 2022/8/1.
 //  核心协议
 
 import UIKit

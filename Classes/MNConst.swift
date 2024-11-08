@@ -1,20 +1,13 @@
 //
 //  MNConst.swift
-//  MNKit
+//  MNKit-Core
 //
-//  Created by 冯盼 on 2021/7/14.
+//  Created by pan on 2021/7/14.
 //  公共定义 全局依赖
 
 import UIKit
 import Foundation
 import CoreGraphics
-
-/// 架包名
-public let MN_KIT_NAME: String = "MNKit"
-/// iconfont字体文件夹名
-public let MN_FONT_DIR: String = "font"
-/// iconfont字体文件名
-public let MN_ICON_NAME: String = "iconfont"
 
 /// 统一分割线高度
 public let MN_SEPARATOR_HEIGHT: CGFloat = 0.7
@@ -34,9 +27,9 @@ public let MN_NAV_BAR_HEIGHT: CGFloat = UINavigationBar.Height
 /// 顶部栏总高度
 public let MN_TOP_BAR_HEIGHT: CGFloat = (MN_STATUS_BAR_HEIGHT + MN_NAV_BAR_HEIGHT)
 /// 标签栏总高度
-public let MN_BOTTOM_BAR_HEIGHT: CGFloat = UITabBar.Height + UIWindow.Safe.bottom
+public let MN_BOTTOM_BAR_HEIGHT: CGFloat = UITabBar.Height + UIWindow.SafeInset.bottom
 /// 底部安全区域高度
-public let MN_BOTTOM_SAFE_HEIGHT: CGFloat = UIWindow.Safe.bottom
+public let MN_BOTTOM_SAFE_HEIGHT: CGFloat = UIWindow.SafeInset.bottom
 
 /// 是否是调试模式
 #if DEBUG

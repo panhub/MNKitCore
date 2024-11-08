@@ -1,8 +1,8 @@
 //
 //  MNHelper.swift
-//  MNKit
+//  MNKit-Core
 //
-//  Created by 冯盼 on 2022/8/2.
+//  Created by pan on 2022/8/2.
 //  核心扩展方法
 
 import UIKit
@@ -61,7 +61,7 @@ extension UINavigationBar {
 extension UIWindow {
     
     /// 安全区域
-    @objc public static let Safe: UIEdgeInsets = {
+    @objc public static let SafeInset: UIEdgeInsets = {
         var inset: UIEdgeInsets = .zero
         if #available(iOS 11.0, *) {
             if Thread.isMainThread {
@@ -78,6 +78,7 @@ extension UIWindow {
 
 // MARK: - UIScreen
 extension UIScreen {
+    
     /// 屏幕宽/高最小值
     @objc public static let Min = {
         if #available(iOS 13.0, *), let screen = UIApplication.shared.delegate?.window??.windowScene?.screen {
@@ -90,6 +91,7 @@ extension UIScreen {
         }
         return min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
     }()
+    
     /// 屏幕宽/高最大值
     @objc public static let Max = {
         if #available(iOS 13.0, *), let screen = UIApplication.shared.delegate?.window??.windowScene?.screen {
@@ -102,6 +104,7 @@ extension UIScreen {
         }
         return max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
     }()
+    
     /// 屏幕宽
     @objc public static var Width: CGFloat {
         if #available(iOS 13.0, *), let screen = UIApplication.shared.delegate?.window??.windowScene?.screen {
@@ -109,6 +112,7 @@ extension UIScreen {
         }
         return UIScreen.main.bounds.width
     }
+    
     /// 屏幕高
     @objc public static var Height: CGFloat {
         if #available(iOS 13.0, *), let screen = UIApplication.shared.delegate?.window??.windowScene?.screen {
@@ -134,13 +138,23 @@ extension UIResponder {
     }
 }
 
+/// 命名空间对`Bundle`的支持
+extension NameSpaceWrapper where Base: Bundle {
+    
+    /// MNKit-Core.bundle
+    public static var kit: Bundle? {
+        guard let bundlePath = Bundle(for: MNAssociationLitted.self).path(forResource: "MNKit-Core", ofType: "bundle") else { return nil }
+        return Bundle(path: bundlePath)
+    }
+}
+
 // MARK: - Bundle
 extension Bundle {
     
     /// 获取资源束 (先查询主目录再查询框架内部)
     /// - Parameter name: 名称
     @objc public convenience init?(name: String) {
-        guard let bundlePath = Bundle.main.path(forResource: name, ofType: "bundle") ?? Bundle.mn.path(forResource: name, ofType: "bundle") else { return nil }
+        guard let bundlePath = Bundle.main.path(forResource: name, ofType: "bundle") else { return nil }
         self.init(path: bundlePath)
     }
     
@@ -148,17 +162,17 @@ extension Bundle {
     /// - Parameters:
     ///   - name: 图片名
     ///   - ext: 扩展名
-    ///   - subpath: 所在文件夹
+    ///   - directory: 所在目录
     /// - Returns: 图片
-    @objc public func image(named name: String, type ext: String = "png", directory subpath: String? = nil) -> UIImage? {
+    @objc public func image(named name: String, type ext: String = "png", in directory: String? = nil) -> UIImage? {
         var imagePath: String?
         if name.contains("@") {
-            imagePath = path(forResource: name, ofType: ext, inDirectory: subpath)
+            imagePath = path(forResource: name, ofType: ext, inDirectory: directory)
         } else {
             var scale: Int = 3
             while scale > 0 {
                 let suffix: String = scale > 1 ? "@\(scale)x" : ""
-                if let path = path(forResource: name + suffix, ofType: ext, inDirectory: subpath) {
+                if let path = path(forResource: name + suffix, ofType: ext, inDirectory: directory) {
                     imagePath = path
                     break
                 }
@@ -167,46 +181,5 @@ extension Bundle {
         }
         guard let imagePath = imagePath else { return nil }
         return UIImage(contentsOfFile: imagePath)
-    }
-}
-
-extension NameSpaceWrapper where Base: Bundle {
-    
-    /// MNKit.bundle
-    public static var kit: Bundle? {
-        guard let bundlePath = Bundle.mn.path(forResource: MN_KIT_NAME, ofType: "bundle") else { return nil }
-        return Bundle(path: bundlePath)
-    }
-    
-    public class func path(forResource name: String?, ofType ext: String?) -> String? {
-#if canImport(MNKit)
-        return Bundle.main.path(forResource: name, ofType: ext, inDirectory: "MNKit.framework")
-#else
-        return Bundle.main.path(forResource: name, ofType: ext)
-#endif
-    }
-
-    public class func paths(forResourcesOfType ext: String?) -> [String]? {
-#if canImport(MNKit)
-        return Bundle.main.paths(forResourcesOfType: ext, inDirectory: "MNKit.framework")
-#else
-        return Bundle.main.paths(forResourcesOfType: ext, inDirectory: nil)
-#endif
-    }
-    
-    public class func url(forResource name: String?, withExtension ext: String?) -> URL? {
-#if canImport(MNKit)
-        return Bundle.main.url(forResource: name, withExtension: ext, subdirectory: "MNKit.framework")
-#else
-        return Bundle.main.url(forResource: name, withExtension: ext)
-#endif
-    }
-    
-    public class func urls(forResourcesWithExtension ext: String?, subdirectory subpath: String?) -> [URL]? {
-#if canImport(MNKit)
-        return Bundle.main.urls(forResourcesWithExtension: ext, subdirectory: "MNKit.framework")
-#else
-        return Bundle.main.urls(forResourcesWithExtension: ext, subdirectory: nil)
-#endif
     }
 }

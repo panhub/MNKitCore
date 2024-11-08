@@ -1,8 +1,8 @@
 //
 //  MNBadge.swift
-//  MNKit
+//  MNKit-Core
 //
-//  Created by 元气绘画 on 2023/10/31.
+//  Created by pan on 2023/10/31.
 //
 
 import Foundation
@@ -12,9 +12,9 @@ public enum MNBadge {
     /// 空
     case `nil`
     /// 以数字构造
-    case int(_ value: Int?)
+    case int(_ value: Int)
     /// 以字符串构造
-    case string(_ string: String?)
+    case string(_ string: String)
 }
 
 /// 以nil字面量构造支持
@@ -59,7 +59,6 @@ extension MNBadge {
         case .nil: return nil
         case .string(let string): return string
         case .int(let value):
-            guard let value = value else { return nil }
             return NSNumber(value: value).stringValue
         }
     }
