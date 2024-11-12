@@ -10,7 +10,7 @@ import ObjectiveC.runtime
 
 /// 命名空间 后续扩展即可
 public class NameSpaceWrapper<Base> {
-    internal let base: Base
+    public let base: Base
     public init(base: Base) {
         self.base = base
     }
