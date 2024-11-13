@@ -143,7 +143,7 @@ extension NameSpaceWrapper where Base: Bundle {
     
     /// MNKit-Core.bundle
     public static var kit: Bundle? {
-        guard let bundlePath = Bundle(for: MNAssociationLitted.self).path(forResource: "MNKit-Core", ofType: "bundle") else { return nil }
+        guard let bundlePath = Bundle(for: MNAssociationLitted.self).path(forResource: "MNKitCore", ofType: "bundle") else { return nil }
         return Bundle(path: bundlePath)
     }
 }
